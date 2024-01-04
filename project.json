@@ -2,5 +2,5 @@
   "version": "2.2",
   "notes": "Обновлен алгоритм счетчика яиц !!!",
   "about": "Курятник WIFI"
-  "ota_url": "https://github.com/PareNN/Chicken_coop/releases/download/v2.2/Chicken_coop_v2.ino.bin"
+  "ota_url": "https://github.com/PareNN/Chicken_coop/releases/download/v2.2/firmware.bin"
 }
