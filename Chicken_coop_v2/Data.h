@@ -48,22 +48,17 @@ struct Config {
   uint32_t wather_time4 = 0;
 
 
-  // Нсатройки сети и MQTT
+  // Настройки сети и MQTT
   bool WiFimode = 0;  // 0 AP, 1 local
   bool mqtt = 0;      // mqtt
 
-  //char mqttHost[32] = "m6.wqtt.ru";
+  
   char mqttHost[32] = "";
-  //uint16_t mqttPort = 15392;
   uint16_t mqttPort = 0;
-  //char mqttLogin[16] = "u_G26BLX";
   char mqttLogin[16] = "";
-  //char mqttPass[16] = "c2iVM5ei";
   char mqttPass[16] = "";
-
-  //char ssid[32] = "Parepko_NN";  // логин wifi
+  
   char ssid[32] = "";  // логин wifi
-  //char pass[32] = "28101979n";   // пароль wifi
   char pass[32] = "";   // пароль wifi
 
 #else
