@@ -1,5 +1,6 @@
 {
   "version": "2.2",
   "notes": "Обновлен алгоритм счетчика яиц и настройка времени !!",
-  "about": "Курятник WIFI"
+  "about": "Курятник WIFI",
+  "ota_url": "https://github.com/PareNN/Chicken_coop/releases/download/v22/firmware.bin"
 }
