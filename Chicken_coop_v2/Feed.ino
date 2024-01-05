@@ -1,12 +1,3 @@
-/*
-void but_feed() {
-  digitalWrite(FEED_PIN, HIGH);
-  DEBUGLN("Насыпаем корм");
-  hub.sendGet("feed");
-  Timer_feed.setInterval(cfg.porc * 1000);
-  Timer_feed.start();
-}
-*/
 
 void Feed() {
 
