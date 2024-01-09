@@ -55,7 +55,8 @@
 #include <Arduino.h>
 #include <GyverNTP.h>
 GyverNTP ntp(3);
-//#define ATOMIC_FS_UPDATE  // OTA обновление сжатым .gz файлом вместо .bin (для esp)
+#define ATOMIC_FS_UPDATE    // OTA обновление сжатым .gz файлом (вместо .bin)
+#define GH_ASYNC            // использовать ASYNC библиотеки
 #include <GyverHub.h>
 GyverHub hub("Devices", "ESP32", "");  // префикс, имя, иконка
 
