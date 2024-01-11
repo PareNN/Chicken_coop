@@ -55,8 +55,8 @@
 #include <Arduino.h>
 #include <GyverNTP.h>
 GyverNTP ntp(3);
-#define ATOMIC_FS_UPDATE    // OTA обновление сжатым .gz файлом (вместо .bin)
-#define GH_ASYNC            // использовать ASYNC библиотеки
+// #define ATOMIC_FS_UPDATE    // OTA обновление сжатым .gz файлом (вместо .bin)
+// #define GH_ASYNC            // использовать ASYNC библиотеки
 #include <GyverHub.h>
 GyverHub hub("Devices", "ESP32", "");  // префикс, имя, иконка
 
@@ -94,7 +94,7 @@ float temp;
 
 
 void build(GH::Builder& b) {
-  hub.setVersion("PareNN/Chicken_coop@2.2");
+  hub.setVersion("PareNN/Chicken_coop@2.1");
   b.Menu(F("Основное; Свет; Корм; Температура; Вода; Дверь; Настройки; MQTT"));
   
   if (b.show(b.menu() == 0)) {
