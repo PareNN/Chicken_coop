@@ -48,6 +48,9 @@
 #define WATHER_PIN 22  //Пин подключение реле клапана воды
 #define HEAT_PIN 23    //Пин подключение реле обогрева
 #define TEMP_PIN 14    //Пин подключение датчика температуры
+#define LAZER_PIN 18   //Пин подключение приемника лазера
+#define KEY_PIN 19     //Пин подключение выключателя
+#define RESET_PIN 25   //Пин подключение выключателя
 #define DEBUG_SERIAL   //Закомментируй чтобы выключить отладку (скорость 115200)
 // #define Start_Mode     //Закоментируй после первой прошивки
 
@@ -57,12 +60,14 @@
 GyverNTP ntp(3);
 // #define ATOMIC_FS_UPDATE    // OTA обновление сжатым .gz файлом (вместо .bin)
 // #define GH_ASYNC            // использовать ASYNC библиотеки
+// #define GH_INCLUDE_PORTAL
 #include <GyverHub.h>
 GyverHub hub("Devices", "ESP32", "");  // префикс, имя, иконка
 
 #include <Stamp.h>
 Stamp gdate;
 
+#include "GyverButton.h"
 #include <EEPROM.h>
 #include "Data.h"  // данные
 #include <GyverTimer.h>
@@ -87,27 +92,32 @@ const char* appass = "";
 
 
 // GHbutton but_feed, but_wather, but_door, but_light, but_reset;
-GTimer Timer_door, Timer_feed, Timer_wather, Timer_connect(MS, 300000), Timer_heat(MS, 60000), Timer_mqtt(MS, 60000);;
+GTimer Timer_door, Timer_feed, Timer_wather, Timer_connect(MS, 300000), Timer_heat(MS, 60000), Timer_mqtt(MS, 60000), Timer_eggs(MS, 500);
+;
 bool prev_light, prev_feed, prev_door, prev_heat, prev_wather, prev_adoor, prev_afeed, prev_alight, prev_aheat, prev_awather;
+int lazer, prev_lazer;
+
+GButton key(KEY_PIN);
+GButton reset(RESET_PIN);
 float temp;
 
 
 
 void build(GH::Builder& b) {
-  hub.setVersion("PareNN/Chicken_coop@2.1");
+  hub.setVersion("PareNN/Chicken_coop@2.2");
   b.Menu(F("Основное; Свет; Корм; Температура; Вода; Дверь; Настройки; MQTT"));
-  
+
   if (b.show(b.menu() == 0)) {
     // GH::Update upd(&hub);
     b.Title_("tit_main", "Курятник WIFI");
     b.beginRow();
     b.Label("Температура").noLabel().size(3);
-    b.Label_("temp",(String(temp))).noLabel().color(GH::Colors::Green).size(1);
+    b.Label_("temp", (String(temp))).noLabel().color(GH::Colors::Green).size(1);
     b.endRow();
 
     b.beginRow();
     b.Label("Яйца").noLabel().size(3);
-    b.Label_("eggs",(String(cfg.eggs))).noLabel().color(GH::Colors::Green).size(1);
+    b.Label_("eggs", (String(cfg.eggs))).noLabel().color(GH::Colors::Green).size(1);
     b.endRow();
 
     b.beginRow();
@@ -318,6 +328,9 @@ void setup() {
   pinMode(DOOR_C_PIN, OUTPUT);
   pinMode(FEED_PIN, OUTPUT);
   pinMode(WATHER_PIN, OUTPUT);
+  pinMode(HEAT_PIN, OUTPUT);
+  pinMode(LAZER_PIN, INPUT);
+  pinMode(KEY_PIN, INPUT_PULLUP);
 
 #ifdef DEBUG_SERIAL
   Serial.begin(115200);
@@ -344,6 +357,8 @@ void setup() {
   prev_alight = cfg.alight;
   prev_aheat = cfg.aheat;
   prev_awather = cfg.awather;
+  prev_lazer = digitalRead(LAZER_PIN);
+  //prev_key = digitalRead(KEY_PIN);
 
   digitalWrite(LIGHT_PIN, cfg.light);
   digitalWrite(HEAT_PIN, cfg.heat);
@@ -371,11 +386,19 @@ void loop() {
   Light();
   Feed();
   Door();
-  Eggs();
+  if (Timer_eggs.isReady()) Eggs();
   Temperature();
   Wather();
   tryReconnect();
   if (Timer_mqtt.isReady()) Mqtt();
+  key.tick();
+  reset.tick();
+  if (reset.isHold()) {
+    cfg.eggs = 0;
+    EE_update();
+    hub.sendUpdate("eggs");
+    hub.sendGetStr("eggs", String(cfg.eggs));
+  }
 
   // =========== ОБНОВЛЕНИЯ ПО ТАЙМЕРУ ===========
   // в библиотеке предусмотрен удобный класс асинхронного таймера
