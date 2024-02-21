@@ -1,6 +1,14 @@
 
 void Light() {
 
+if (key.isClick()) {
+    cfg.light = !cfg.light;
+    hub.sendUpdate("light");
+    hub.sendGetStr("light", String(cfg.light));
+    EE_update();
+  
+}
+  
   if (cfg.light != prev_light) {
     digitalWrite(LIGHT_PIN, cfg.light);
     if (cfg.light == 0) {
@@ -15,7 +23,7 @@ void Light() {
     EE_update();
   }
 
- if (cfg.alight != prev_alight) {
+  if (cfg.alight != prev_alight) {
     if (cfg.alight == 0) {
       DEBUGLN("Автосвет выключен");
     }
@@ -52,6 +60,4 @@ void Light() {
       }
     }
   }
-
 }
-
