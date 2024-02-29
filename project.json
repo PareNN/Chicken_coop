@@ -8,7 +8,7 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "https://github.com/PareNN/Chicken_coop/releases/download/v2.2/Chicken_coop_v2.2.ino.bin",
+          "path": "https://github.com/PareNN/Chicken_coop/releases/download/v2.2/firmware.bin",
           "offset": 0
         }
       ]
