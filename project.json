@@ -2,7 +2,7 @@
   "name": "Курятник WIFI",
   "about": "Курятник WIFI",
   "version": "2.2",
-  "notes": "Обновлен алгоритм счетчика яиц и настройка времени!\nhttps://github.com/PareNN/Chicken_coop/",
+  "notes": "Обновлен алгоритм счетчика яиц и настройка времени!",
   "builds": [
     {
       "chipFamily": "ESP32",
