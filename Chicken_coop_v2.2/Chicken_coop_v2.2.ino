@@ -131,6 +131,10 @@ void build(GH::Builder& b) {
     b.Switch_("door", &cfg.door).noLabel().size(1);
     b.endRow();
 
+    b.beginRow();
+    b.Label("Подогрев").noLabel().size(3);
+    b.LED_("heat", &cfg.heat).noLabel().size(1);
+    b.endRow();
 
     b.Label_("cur_time", ntp.timeString()).noLabel().color(GH::Colors::Red);
   }
